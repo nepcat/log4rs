@@ -315,17 +315,21 @@ pub enum DeserializingConfigError {
 #[derive(Clone, Debug, Default, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct RawConfig {
+    /// Refresh rate
     #[serde(deserialize_with = "de_duration", default)]
-    refresh_rate: Option<Duration>,
+    pub refresh_rate: Option<Duration>,
 
+    /// Root
     #[serde(default)]
-    root: Root,
+    pub root: Root,
 
+    /// Appenders
     #[serde(default)]
-    appenders: HashMap<String, AppenderConfig>,
+    pub appenders: HashMap<String, AppenderConfig>,
 
+    /// Loggers
     #[serde(default)]
-    loggers: HashMap<String, Logger>,
+    pub loggers: HashMap<String, Logger>,
 }
 
 #[derive(Debug, Error)]
@@ -435,12 +439,12 @@ where
 #[derive(Clone, Debug, Derivative, serde::Deserialize)]
 #[derivative(Default)]
 #[serde(deny_unknown_fields)]
-struct Root {
+pub struct Root {
     #[serde(default = "root_level_default")]
     #[derivative(Default(value = "root_level_default()"))]
-    level: LevelFilter,
+    pub level: LevelFilter,
     #[serde(default)]
-    appenders: Vec<String>,
+    pub appenders: Vec<String>,
 }
 
 fn root_level_default() -> LevelFilter {
@@ -449,12 +453,12 @@ fn root_level_default() -> LevelFilter {
 
 #[derive(serde::Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields)]
-struct Logger {
-    level: LevelFilter,
+pub struct Logger {
+    pub level: LevelFilter,
     #[serde(default)]
-    appenders: Vec<String>,
+    pub appenders: Vec<String>,
     #[serde(default = "logger_additive_default")]
-    additive: bool,
+    pub additive: bool,
 }
 
 fn logger_additive_default() -> bool {
